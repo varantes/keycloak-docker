@@ -1,0 +1,37 @@
+services:
+#  another-database-if-you-need: # Example. Remove before using.
+#    image: postgres:latest
+#    container_name: db-kc24
+#    environment:
+#      POSTGRES_DB: postgres
+#      POSTGRES_USER: admin
+#      POSTGRES_PASSWORD: admin
+#    ports:
+#      - "25433:5432"
+#    networks:
+#      - local_network
+  kc24:
+    image: quay.io/keycloak/keycloak:24.0
+    container_name: kc24
+    environment:
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8080
+      KC_HOSTNAME_STRICT_BACKCHANNEL: "true"
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HEALTH_ENABLED: "true"
+      KC_LOG_LEVEL: info
+#    healthcheck:
+#      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ready"]
+#      interval: 15s
+#      timeout: 2s
+#      retries: 15
+    command: ["start-dev", "--http-port", "8080", "--https-port", "8443"]
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    networks:
+      - local_network
+networks:
+  local_network:
+    driver: bridge
